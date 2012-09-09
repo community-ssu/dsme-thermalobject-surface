@@ -9,7 +9,7 @@ SO_LIBRARIES    := libthermalobject_surface
 libthermalobject_surface_C_OBJS := thermalobject_surface.o thermalsensor_battery.o
 thermalobject_surface.o:  C_EXTRA_GENFLAGS := -fPIC
 thermalsensor_battery.o : C_EXTRA_GENFLAGS := -fPIC $$(pkg-config --cflags glib-2.0)
-libthermalobject_surface_EXTRA_LDFLAGS := -lbmeipc $$(pkg-config --libs glib-2.0)
+libthermalobject_surface_EXTRA_LDFLAGS := $$(pkg-config --libs glib-2.0)
 
 MKDEP_INCFLAGS	:= $$(pkg-config --cflags-only-I glib-2.0 dbus-glib-1)
 
