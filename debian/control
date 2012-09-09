@@ -1,0 +1,29 @@
+Source: dsme-thermalobject-surface
+Section: misc
+Priority: optional
+Maintainer: Sergey Yakubenko <EXT-Sergey.Yakubenko@nokia.com>
+Build-Depends: debhelper (>= 4.1.0),
+ dsme-dev (>= 0.60.48),
+ libbmeipc-dev,
+ libdsme0.2.0-dev (>= 0.60.29),
+ pkg-config,
+ libglib2.0-dev,
+ libdbus-1-dev (>= 1.0),
+ libdbus-glib-1-dev
+Standards-Version: 3.7.2
+
+Package: dsme-thermalobject-surface
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: dsme-thermalobject-surface plugin
+ This package contains thermalobject-surface plugin
+
+Package: dsme-thermalobject-surface-dbg
+Section: libdevel
+Priority: extra
+Architecture: any
+Depends: dsme-thermalobject-surface (= ${binary:Version})
+Description: dsme-thermalobject-surface plugin (with debug symbols)
+ This package contains thermalobject-surface plugin
+
