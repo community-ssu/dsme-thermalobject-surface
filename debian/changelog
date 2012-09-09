@@ -1,3 +1,9 @@
+dsme-thermalobject-surface (0.0.2) unstable; urgency=low
+
+  * Rewrite dsme module to use bq27200 kernel driver
+
+ -- Pali Rohár <pali.rohar@gmail.com>  Sun, 09 Sep 2012 19:44:05 +0200
+
 dsme-thermalobject-surface (0.0.1+0m5) unstable; urgency=low
 
   * This entry has been added by BIFH queue processor
