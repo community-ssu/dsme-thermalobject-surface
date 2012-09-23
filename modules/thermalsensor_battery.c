@@ -28,8 +28,6 @@
 #include <glib.h>
 #include <string.h>
 
-#define BQ27200_TEMP_PATH "/sys/class/power_supply/bq27200-0/temp"
-
 void*       the_cookie;
 void      (*report_temperature)(void* cookie, int temperature);
 
@@ -65,7 +63,7 @@ extern bool dsme_request_battery_temperature(
                 void* cookie,
                 void (callback)(void* cookie, int temperature))
 {
-  FILE *fp = fopen(BQ27200_TEMP_PATH, "r");
+  FILE *fp = fopen("/sys/class/power_supply/rx51-battery/temp", "r");
 
   if (!fp)
     return false;

@@ -1,6 +1,6 @@
-dsme-thermalobject-surface (0.0.2) unstable; urgency=low
+dsme-thermalobject-surface (1.0) unstable; urgency=low
 
-  * Rewrite dsme module to use bq27200 kernel driver
+  * Rewrite dsme module to use rx51-battery kernel driver
 
  -- Pali Rohár <pali.rohar@gmail.com>  Sun, 09 Sep 2012 19:44:05 +0200
 
