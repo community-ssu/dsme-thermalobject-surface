@@ -1,4 +1,4 @@
-dsme-thermalobject-surface (1.0) unstable; urgency=low
+dsme-thermalobject-surface (1.0-1) fremantle; urgency=low
 
   * Rewrite dsme module to use rx51-battery kernel driver
 
