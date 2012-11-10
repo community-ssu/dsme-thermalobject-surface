@@ -26,19 +26,30 @@
 #include "thermalsensor_battery.h"
 #include "dsme/logging.h"
 #include <glib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <string.h>
+
+#define RX51_TEMP_PATH "/sys/class/power_supply/rx51-battery/temp"
 
 void*       the_cookie;
 void      (*report_temperature)(void* cookie, int temperature);
 
 static gboolean read_temperature(gpointer data)
 {
-  FILE *fp = data;
+  FILE *fp;
   int temp;
   int ret;
 
+  fp = fopen(RX51_TEMP_PATH, "r");
+
   if (!fp)
+  {
+    /* use temperature -1 to indicate that the request failed */
+    dsme_log(LOG_ERR, "read_temperature: Cannot open file %s:%s", RX51_TEMP_PATH, strerror(errno));
+    report_temperature(the_cookie, -1);
     return false;
+  }
 
   ret = fscanf(fp, "%d", &temp);
 
@@ -47,6 +58,7 @@ static gboolean read_temperature(gpointer data)
   if (ret != 1)
   {
     /* use temperature -1 to indicate that the request failed */
+    dsme_log(LOG_ERR, "read_temperature: Cannot read temperature from file %s", RX51_TEMP_PATH);
     report_temperature(the_cookie, -1);
     return false;
   }
@@ -54,6 +66,8 @@ static gboolean read_temperature(gpointer data)
   /* dsme accept only milidegrees celsius or degress kelvin */
   /* convert 1/100 degrees celsius to kelvin */
   temp = temp/100+273;
+
+  dsme_log(LOG_NOTICE, "read_temperature: %d kelvin", temp);
 
   report_temperature(the_cookie, temp);
   return false;
@@ -63,16 +77,11 @@ extern bool dsme_request_battery_temperature(
                 void* cookie,
                 void (callback)(void* cookie, int temperature))
 {
-  FILE *fp = fopen("/sys/class/power_supply/rx51-battery/temp", "r");
-
-  if (!fp)
-    return false;
-
   the_cookie         = cookie;
   report_temperature = callback;
 
   /* make sure that callback will be called after function returns */
-  g_timeout_add_seconds(0, read_temperature, fp);
+  g_timeout_add_seconds(0, read_temperature, NULL);
 
   return true;
 }
