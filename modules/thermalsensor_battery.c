@@ -64,8 +64,8 @@ static gboolean read_temperature(gpointer data)
   }
 
   /* dsme accept only milidegrees celsius or degress kelvin */
-  /* convert 1/100 degrees celsius to kelvin */
-  temp = temp/100+273;
+  /* convert 1/10 degrees celsius to kelvin */
+  temp = temp/10+273;
 
   dsme_log(LOG_NOTICE, "read_temperature: %d kelvin", temp);
 
