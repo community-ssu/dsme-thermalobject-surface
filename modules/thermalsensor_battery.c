@@ -31,6 +31,7 @@
 #include <string.h>
 
 #define RX51_TEMP_PATH "/sys/class/power_supply/rx51-battery/temp"
+#define BQ_TEMP_PATH "/sys/class/power_supply/bq27200-0/temp"
 
 void*       the_cookie;
 void      (*report_temperature)(void* cookie, int temperature);
@@ -40,13 +41,24 @@ static gboolean read_temperature(gpointer data)
   FILE *fp;
   int temp;
   int ret;
+  int bq;
 
   fp = fopen(RX51_TEMP_PATH, "r");
+  bq = 0;
+
+  /* fallback to temperature reported by bq27200 chip */
+  if (!fp)
+  {
+    dsme_log(LOG_ERR, "read_temperature: Cannot open file %s:%s", RX51_TEMP_PATH, strerror(errno));
+    dsme_log(LOG_ERR, "read_temperature: Try fallback to bq27200");
+    fp = fopen(BQ_TEMP_PATH, "r");
+    bq = 1;
+  }
 
   if (!fp)
   {
     /* use temperature -1 to indicate that the request failed */
-    dsme_log(LOG_ERR, "read_temperature: Cannot open file %s:%s", RX51_TEMP_PATH, strerror(errno));
+    dsme_log(LOG_ERR, "read_temperature: Cannot open file %s:%s", bq ? BQ_TEMP_PATH : RX51_TEMP_PATH, strerror(errno));
     report_temperature(the_cookie, -1);
     return false;
   }
@@ -58,7 +70,7 @@ static gboolean read_temperature(gpointer data)
   if (ret != 1)
   {
     /* use temperature -1 to indicate that the request failed */
-    dsme_log(LOG_ERR, "read_temperature: Cannot read temperature from file %s", RX51_TEMP_PATH);
+    dsme_log(LOG_ERR, "read_temperature: Cannot read temperature from file %s", bq ? BQ_TEMP_PATH : RX51_TEMP_PATH);
     report_temperature(the_cookie, -1);
     return false;
   }
