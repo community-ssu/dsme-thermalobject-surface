@@ -79,7 +79,9 @@ static gboolean read_temperature(gpointer data)
   /* convert 1/10 degrees celsius to kelvin */
   temp = temp/10+273;
 
+#if 0
   dsme_log(LOG_NOTICE, "read_temperature: %d kelvin", temp);
+#endif
 
   report_temperature(the_cookie, temp);
   return false;
